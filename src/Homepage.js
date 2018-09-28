@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import BookListItem from './BookListItem';
 import * as BooksAPI from './BooksAPI'
 
 class Homepage extends Component {
@@ -58,10 +59,6 @@ class Homepage extends Component {
     })
   }
 
-  handleSelect = (id,e) => {
-    this.handleUpdate(id,e.target.value)
-  }
-
   render() {
     let { books, loading, shelves } = this.state;
     let allShelves = {};
@@ -73,24 +70,11 @@ class Homepage extends Component {
           <div className="bookshelf-books">
             <ol className="books-grid">
               {books.filter(b => b.shelf === shelf.id).sort((a,b)=>(a.title - b.title)).map(b => (
-                <li key={b.id}>
-                  <div className="book">
-                    <div className="book-top">
-                      <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url('${b.imageLinks.thumbnail}')` }}></div>
-                      <div className="book-shelf-changer">
-                        <select value="move" onChange={(e) => this.handleSelect(b.id, e)}>
-                          <option value="move" disabled>Move to...</option>
-                          <option value="currentlyReading">Currently Reading</option>
-                          <option value="wantToRead">Want to Read</option>
-                          <option value="read">Read</option>
-                          <option value="none">None</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="book-title">{b.title}</div>
-                    <div className="book-authors">{b.authors}</div>
-                  </div>
-                </li>
+                <BookListItem
+                  key={b.id}
+                  book={b}
+                  onSelect={this.handleUpdate}
+                />
               ))}
             </ol>
           </div>
