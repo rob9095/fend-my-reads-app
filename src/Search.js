@@ -25,10 +25,6 @@ class Search extends Component {
       })
     })
     .catch(err => {
-      this.setState({
-        error: true,
-        errorMessage: 'Unable to get books, please refresh the page to try again.',
-      })
     })
   }
 
@@ -86,14 +82,10 @@ class Search extends Component {
       results = books.sort((a,b)=>(a.title - b.title)).map(b => {
         let currentBook = currentBooks.find(cb=>cb.id === b.id)
         if (currentBook) {
-          let book = {
-            ...b,
-            shelf: currentBook.shelf,
-          }
           return (
             <BookListItem
               key={b.id}
-              book={book}
+              book={{...b, shelf: currentBook.shelf,}}
               onSelect={this.handleUpdate}
             />
           )
@@ -101,7 +93,7 @@ class Search extends Component {
           return(
             <BookListItem
               key={b.id}
-              book={b}
+              book={{...b, shelf: 'none'}}
               onSelect={this.handleUpdate}
             />
           )
@@ -113,7 +105,7 @@ class Search extends Component {
         <div className="search-books-bar">
           <Link className="close-search" to="/">Close</Link>
           <div className="search-books-input-wrapper">
-            <input type="text" name="searchValue" value={searchValue} onChange={this.handleSearch} placeholder="Search by title or author"/>
+            <input autoFocus type="text" name="searchValue" value={searchValue} onChange={this.handleSearch} placeholder="Search by title or author"/>
           </div>
         </div>
         <div className="search-books-results">
